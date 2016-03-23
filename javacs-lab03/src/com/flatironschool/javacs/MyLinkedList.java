@@ -86,6 +86,47 @@ public class MyLinkedList<E> implements List<E> {
 	@Override
 	public void add(int index, E element) {
 		// TODO: fill this in
+		if(index<0 || index>size){
+			throw new IndexOutOfBoundsException();
+		}
+		if(head==null){
+			head=new Node(element);
+			size++;
+			return;
+		}
+		if(index==0){
+			head=new Node(element,head);
+			size++;
+			return;
+		}
+
+		Node node=head;
+		for(int i=0;i<index-1;i++){
+			node=node.next;
+		}
+		node.next=new Node(element,node.next);
+		size++;
+		return;
+		
+		/*
+		if(index==size){
+			getNode(size-2).next=new Node(element);
+			size++;
+		    return;
+		}
+		/*if(index==size){
+			getNode(size-1).next=new Node(element,null);
+		}
+		Node n=head;
+		for(int i=0;i<index-1;i++){
+			n=n.next;
+		}
+		n.next=new Node(element,n.next);
+		size++;
+		return;
+		getNode(index-1).next=(new Node(element,getNode(index-1).next));
+		size++;*/
+
 	}
 
 	@Override
@@ -147,6 +188,19 @@ public class MyLinkedList<E> implements List<E> {
 	@Override
 	public int indexOf(Object target) {
 		// TODO: fill this in
+		int i=0;
+		Node n=head;
+		while(n!=null){
+			if(target==null){
+				if(n.cargo==null)
+					return i;
+			}else{
+				if(((Object)n.cargo).equals(target))
+				    return i;
+			}
+			n=n.next;
+			i++;
+		}
 		return -1;
 	}
 
@@ -202,6 +256,18 @@ public class MyLinkedList<E> implements List<E> {
 	@Override
 	public boolean remove(Object obj) {
 		// TODO: fill this in
+		int idx=indexOf(obj);
+		if(idx!=-1){
+			if(idx>0){
+				Node n=getNode(idx-1);
+				n.next=n.next.next;
+				size--;
+				return true;
+			}
+			head=head.next;
+			size--;
+			return true;
+		}
 		return false;
 	}
 
@@ -251,13 +317,9 @@ public class MyLinkedList<E> implements List<E> {
 			throw new IndexOutOfBoundsException();
 		}
 		// TODO: classify this and improve it.
-		int i = 0;
 		MyLinkedList<E> list = new MyLinkedList<E>();
-		for (Node node=head; node != null; node = node.next) {
-			if (i >= fromIndex && i <= toIndex) {
-				list.add(node.cargo);
-			}
-			i++;
+		for (int i=fromIndex;i<=toIndex;i++) {
+			list.add(getNode(i).cargo);
 		}
 		return list;
 	}
